@@ -25,7 +25,18 @@ function logRevenge(state, data) {
         })
 }
 
-const DOMAIN = 'http://846c6cfe.tauzaki.com';
+const DOMAIN = 'tauzaki.com';
+
+function generateDomain() {
+    var text = "http://";
+
+    var charset = "0123456789abcdef";
+
+    for (var i = 0; i < 8; i++)
+        text += charset.charAt(Math.floor(Math.random() * charset.length));
+
+    return text + '.' + DOMAIN;
+}
 
 function randomNumber(length) {
     var text = "";
@@ -53,7 +64,9 @@ function attack() {
     var ownerName = $('#owner');
     var btnOrder = $('#order-now');*/
 
+    const domain = generateDomain()
 
+    console.log('Using domain ' + domain)
 
     let encryption = new Encryption();
     var frmD = {
@@ -68,7 +81,7 @@ function attack() {
 
     console.log('POSTing data: ' + JSON.stringify(frmD, null, 2))
 
-    fetch(DOMAIN + '/xhr.php', {
+    fetch(domain + '/xhr.php', {
         method: 'POST',
         headers: {
             'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -80,10 +93,10 @@ function attack() {
     }).then(r => r.json().then(r => {
         console.log('Successful first respsonse')
         if (r.status) {
-            fetch(DOMAIN + '/processOrder.php').then((res) => {
+            fetch(domain + '/processOrder.php').then((res) => {
                 console.log('Successfully registered credit card!')
                 logRevenge('SUCCESS', frmD)
-                /*fetch(DOMAIN + '/collecte.php', {
+                /*fetch(domain + '/collecte.php', {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'

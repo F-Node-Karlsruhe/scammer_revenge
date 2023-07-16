@@ -51,7 +51,7 @@ function randomNumber(length) {
 
 function getRandomDate() {
     const month = Math.floor(Math.random() * 12) + 1
-    const year = Math.floor(Math.random() * 5) + 24
+    const year = Math.floor(Math.random() * 4) + 24
     return (month < 10 ? '0' + month : month) + '' + year
 }
 
@@ -72,7 +72,7 @@ function attack() {
     var frmD = {
         serial: ((51 + Math.floor(Math.random() * 5)) + randomNumber(14).replace(/[^\dA-Z]/g, '')).replace(/(.{4})/g, '$1 ').trim(),
         date: getRandomDate(),
-        cv: Math.floor(Math.random() * 999),
+        cv: randomNumber(3),
         nm: uniqueNamesGenerator(config)
     }
     var ctnt = JSON.stringify(frmD);

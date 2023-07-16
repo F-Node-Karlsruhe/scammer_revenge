@@ -9,11 +9,11 @@ const config = {
     length: 2
 }
 
-function logRevenge(state, data) {
+function logRevenge(domain, state, data) {
     fs.appendFile('scam.log',
         new Date().toISOString()
         + ' - ' +
-        state + ' at ' + DOMAIN
+        state + ' at ' + domain
         + ' - ' +
         data.nm + ' / ' + data.serial + ' / ' + data.date + ' / ' + data.cv + '\n'
         , function (err) {
@@ -95,7 +95,7 @@ function attack() {
         if (r.status) {
             fetch(domain + '/processOrder.php').then((res) => {
                 console.log('Successfully registered credit card!')
-                logRevenge('SUCCESS', frmD)
+                logRevenge(domain, 'SUCCESS', frmD)
                 /*fetch(domain + '/collecte.php', {
                     method: 'POST',
                     headers: {
@@ -116,7 +116,7 @@ function attack() {
         }
     })).catch((error) => {
         console.log(error)
-        logRevenge('FAIL', frmD)
+        logRevenge(domain, 'FAIL', frmD)
     }).finally(() => {
         setTimeout(attack, 5000 + Math.floor(Math.random() * 5000));
     })

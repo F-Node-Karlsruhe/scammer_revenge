@@ -1,0 +1,11 @@
+###
+
+post http://4ab6487a.tauzaki.com/xhr.php
+Content-Type: application/x-www-form-urlencoded; charset=UTF-8
+
+{
+                    "o":"35c547698da79",
+                    "tkn":{} 
+}
+
+

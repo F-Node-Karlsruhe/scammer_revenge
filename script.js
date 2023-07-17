@@ -13,7 +13,11 @@ const domainEnds = [
     'nl',
     'net',
     'edu',
-    'gov'
+    'gov',
+    'pl',
+    'au',
+    'it',
+    'be'
 ];
 
 const domains = [
@@ -26,7 +30,9 @@ const domains = [
     'sex',
     'joyclub',
     'youtu',
-    'netcup'
+    'netcup',
+    'bund',
+    'kit'
 ]
 
 const nameConfig = {

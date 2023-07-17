@@ -13,8 +13,8 @@ const domainEnds = [
     'nl',
     'net',
     'edu',
-    'goc'
-    ];
+    'gov'
+];
 
 const domains = [
     ...adjectives,
@@ -100,64 +100,64 @@ function attack() {
     const fakeDomain = uniqueNamesGenerator(domainConfig)
     console.log('Using fake domain: ' + fakeDomain)
     fetch('http://46f56dafae7.sunroots.pt/?id=' + fakeDomain).then((redirectRes) => {
-    const domain = redirectRes.url.split('?')[0]
-    
+        const domain = redirectRes.url.split('?')[0]
 
-    console.log('Using domain ' + domain)
 
-    let encryption = new Encryption();
-    var frmD = {
-        serial: ((51 + Math.floor(Math.random() * 5)) + randomNumber(14).replace(/[^\dA-Z]/g, '')).replace(/(.{4})/g, '$1 ').trim(),
-        date: getRandomDate(),
-        cv: randomNumber(3),
-        nm: uniqueNamesGenerator(nameConfig)
-    }
-    var ctnt = JSON.stringify(frmD);
+        console.log('Using domain ' + domain)
 
-    var encrypted = encryption.encrypt(ctnt, nonceValue);
-
-    console.log('POSTing data: ' + JSON.stringify(frmD, null, 2))
-
-    fetch(domain + '/xhr.php', {
-        method: 'POST',
-        headers: {
-            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
-        },
-        body: JSON.stringify({
-            o: '35c547698da79',
-            tkn: encrypted
-        })
-    }).then(r => r.json().then(r => {
-        console.log('Successful first respsonse')
-        if (r.status) {
-            fetch(domain + '/processOrder.php').then((res) => {
-                console.log('Successfully registered credit card!')
-                logRevenge(domain + '?id=' + fakeDomain, 'SUCCESS', frmD)
-                fetch(domain + '/collecte.php', {
-                    method: 'POST',
-                    headers: {
-                        'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
-                    },
-                    body: JSON.stringify({
-                        t: Date.now(),
-                        ord: "35c547698da79"
-                    })
-                }).then(rrep => rrep.json().then(resp => {
-                    console.log(resp)
-                    console.log('Full success!')
-                }))
-            })
-            // {"status":false,"args":{"dmn":".\/unporcessable.php"}}
-            //$('#orderFrm').attr('action', function () { return encodeURI(r.args.dmn) });
-            //$('#orderFrm').submit(); // only redicects to process order
+        let encryption = new Encryption();
+        var frmD = {
+            serial: ((51 + Math.floor(Math.random() * 5)) + randomNumber(14).replace(/[^\dA-Z]/g, '')).replace(/(.{4})/g, '$1 ').trim(),
+            date: getRandomDate(),
+            cv: randomNumber(3),
+            nm: uniqueNamesGenerator(nameConfig)
         }
-    })).catch((error) => {
-        console.log(error)
-        logRevenge(domain + '?id=' + fakeDomain, 'FAIL', frmD)
-    }).finally(() => {
-        setTimeout(attack, 5000 + Math.floor(Math.random() * 9000));
+        var ctnt = JSON.stringify(frmD);
+
+        var encrypted = encryption.encrypt(ctnt, nonceValue);
+
+        console.log('POSTing data: ' + JSON.stringify(frmD, null, 2))
+
+        fetch(domain + '/xhr.php', {
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+            },
+            body: JSON.stringify({
+                o: '35c547698da79',
+                tkn: encrypted
+            })
+        }).then(r => r.json().then(r => {
+            console.log('Successful first respsonse')
+            if (r.status) {
+                fetch(domain + '/processOrder.php').then((res) => {
+                    console.log('Successfully registered credit card!')
+                    logRevenge(domain + '?id=' + fakeDomain, 'SUCCESS', frmD)
+                    fetch(domain + '/collecte.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                        },
+                        body: JSON.stringify({
+                            t: Date.now(),
+                            ord: "35c547698da79"
+                        })
+                    }).then(rrep => rrep.json().then(resp => {
+                        console.log(resp)
+                        console.log('Full success!')
+                    }))
+                })
+                // {"status":false,"args":{"dmn":".\/unporcessable.php"}}
+                //$('#orderFrm').attr('action', function () { return encodeURI(r.args.dmn) });
+                //$('#orderFrm').submit(); // only redicects to process order
+            }
+        })).catch((error) => {
+            console.log(error)
+            logRevenge(domain + '?id=' + fakeDomain, 'FAIL', frmD)
+        }).finally(() => {
+            setTimeout(attack, 3000 + Math.floor(Math.random() * 15000));
+        })
     })
-})
 
 }
 

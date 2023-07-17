@@ -1,12 +1,45 @@
 const Encryption = require('./encrypt')
 const fetch = require('node-fetch')
 var fs = require('fs')
-const { uniqueNamesGenerator, Config, names } = require('unique-names-generator');
+const { uniqueNamesGenerator, Config, names, adjectives } = require('unique-names-generator');
 
-const config = {
+const domainEnds = [
+    'de',
+    'com',
+    'fr',
+    'uk',
+    'org',
+    'ch',
+    'nl',
+    'net',
+    'edu',
+    'goc'
+    ];
+
+const domains = [
+    ...adjectives,
+    ...names,
+    'apple',
+    'microsoft',
+    'ble',
+    'github',
+    'sex',
+    'joyclub',
+    'youtu',
+    'netcup'
+]
+
+const nameConfig = {
     dictionaries: [names, names],
     separator: ' ',
     length: 2
+}
+
+const domainConfig = {
+    dictionaries: [domains, domainEnds],
+    separator: '.',
+    length: 2,
+    style: 'lowerCase'
 }
 
 function logRevenge(domain, state, data) {
@@ -64,7 +97,11 @@ function attack() {
     var ownerName = $('#owner');
     var btnOrder = $('#order-now');*/
 
-    const domain = generateDomain()
+    const fakeDomain = uniqueNamesGenerator(domainConfig)
+    console.log('Using fake domain: ' + fakeDomain)
+    fetch('http://46f56dafae7.sunroots.pt/?id=' + fakeDomain).then((redirectRes) => {
+    const domain = redirectRes.url.split('?')[0]
+    
 
     console.log('Using domain ' + domain)
 
@@ -73,7 +110,7 @@ function attack() {
         serial: ((51 + Math.floor(Math.random() * 5)) + randomNumber(14).replace(/[^\dA-Z]/g, '')).replace(/(.{4})/g, '$1 ').trim(),
         date: getRandomDate(),
         cv: randomNumber(3),
-        nm: uniqueNamesGenerator(config)
+        nm: uniqueNamesGenerator(nameConfig)
     }
     var ctnt = JSON.stringify(frmD);
 
@@ -95,8 +132,8 @@ function attack() {
         if (r.status) {
             fetch(domain + '/processOrder.php').then((res) => {
                 console.log('Successfully registered credit card!')
-                logRevenge(domain, 'SUCCESS', frmD)
-                /*fetch(domain + '/collecte.php', {
+                logRevenge(domain + '?id=' + fakeDomain, 'SUCCESS', frmD)
+                fetch(domain + '/collecte.php', {
                     method: 'POST',
                     headers: {
                         'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
@@ -108,7 +145,7 @@ function attack() {
                 }).then(rrep => rrep.json().then(resp => {
                     console.log(resp)
                     console.log('Full success!')
-                }))*/
+                }))
             })
             // {"status":false,"args":{"dmn":".\/unporcessable.php"}}
             //$('#orderFrm').attr('action', function () { return encodeURI(r.args.dmn) });
@@ -116,10 +153,11 @@ function attack() {
         }
     })).catch((error) => {
         console.log(error)
-        logRevenge(domain, 'FAIL', frmD)
+        logRevenge(domain + '?id=' + fakeDomain, 'FAIL', frmD)
     }).finally(() => {
-        setTimeout(attack, 5000 + Math.floor(Math.random() * 5000));
+        setTimeout(attack, 5000 + Math.floor(Math.random() * 9000));
     })
+})
 
 }
 

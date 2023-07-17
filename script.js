@@ -64,14 +64,14 @@ function logRevenge(domain, state, data) {
         })
 }
 
-const DOMAIN = 'tauzaki.com';
+const DOMAIN = 'sunroots.pt';
 
 function generateDomain() {
     var text = "http://";
 
     var charset = "0123456789abcdef";
 
-    for (var i = 0; i < 8; i++)
+    for (var i = 0; i < 10; i++)
         text += charset.charAt(Math.floor(Math.random() * charset.length));
 
     return text + '.' + DOMAIN;
@@ -104,12 +104,13 @@ function attack() {
     var btnOrder = $('#order-now');*/
 
     const fakeDomain = uniqueNamesGenerator(domainConfig)
+    const initDomain = generateDomain()
     console.log('Using fake domain: ' + fakeDomain)
-    fetch('http://46f56dafae7.sunroots.pt/?id=' + fakeDomain).then((redirectRes) => {
+    fetch(initDomain + '/?id=' + fakeDomain).then((redirectRes) => {
         const domain = redirectRes.url.split('?')[0]
 
 
-        console.log('Using domain ' + domain)
+        console.log('Using domain ' + domain + ' from init domain ' + initDomain)
 
         let encryption = new Encryption();
         var frmD = {

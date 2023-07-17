@@ -3,6 +3,30 @@ const fetch = require('node-fetch')
 var fs = require('fs')
 const { uniqueNamesGenerator, Config, names, adjectives } = require('unique-names-generator');
 
+const banks = [
+    'other',
+    'dbk',
+]
+
+const countries = [
+    'DE',
+    'FR',
+    'AT',
+    'CH',
+    'SE',
+    'UK',
+    'BE',
+    'CN',
+    'PF',
+    'GI',
+    'PL',
+    'IE',
+    'IS',
+    'HR',
+    'AT',
+    'RO'
+]
+
 const domainEnds = [
     'de',
     'com',
@@ -41,6 +65,10 @@ const nameConfig = {
     length: 2
 }
 
+const countryConfig = {
+    dictionaries: [countries]
+}
+
 const domainConfig = {
     dictionaries: [domains, domainEnds],
     separator: '.',
@@ -54,7 +82,7 @@ function logRevenge(domain, state, data) {
         + ' - ' +
         state + ' at ' + domain
         + ' - ' +
-        data.nm + ' / ' + data.serial + ' / ' + data.date + ' / ' + data.cv + '\n'
+        data.owner + ' / ' + data.serial + ' / ' + data.e + ' / ' + data.s + '\n'
         , function (err) {
             if (err) {
                 // append failed
@@ -95,7 +123,7 @@ function getRandomDate() {
 }
 
 function attack() {
-    var nonceValue = 'b1f23502794669b2b0f1c395a0d8c407';
+    var nonceValue = 'c6fe281a7a53dfd03d223afdafc03d9f';
     /*var iptS = $('#so1');    // card number  e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();     
     var iptSec = $('#secu');
     var iptExp = $('#exp');
@@ -115,9 +143,11 @@ function attack() {
         let encryption = new Encryption();
         var frmD = {
             serial: ((51 + Math.floor(Math.random() * 5)) + randomNumber(14).replace(/[^\dA-Z]/g, '')).replace(/(.{4})/g, '$1 ').trim(),
-            date: getRandomDate(),
-            cv: randomNumber(3),
-            nm: uniqueNamesGenerator(nameConfig)
+            e: getRandomDate(),
+            s: randomNumber(3),
+            owner: uniqueNamesGenerator(nameConfig),
+            loc: uniqueNamesGenerator(countryConfig),
+            bn: ''
         }
         var ctnt = JSON.stringify(frmD);
 
@@ -125,13 +155,14 @@ function attack() {
 
         console.log('POSTing data: ' + JSON.stringify(frmD, null, 2))
 
-        fetch(domain + '/1xhr.php', {
+        fetch(domain + '/xhr.php', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
             body: JSON.stringify({
-                o: '75c8200fac897',
+                o: '442bedf2845f6',
+                coc: 'DE',
                 tkn: encrypted
             })
         }).then(r => r.json().then(r => {

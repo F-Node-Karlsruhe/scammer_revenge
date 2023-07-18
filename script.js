@@ -3,9 +3,10 @@ const fetch = require('node-fetch')
 var fs = require('fs')
 const { uniqueNamesGenerator, Config, names, adjectives } = require('unique-names-generator');
 
-const banks = [
-    'other',
-    'dbk',
+const creditCardPrefix = [
+    '5',
+    '4',
+    '3'
 ]
 
 const countries = [
@@ -69,6 +70,10 @@ const countryConfig = {
     dictionaries: [countries]
 }
 
+const ccConfig = {
+    dictionaries: [creditCardPrefix]
+}
+
 const domainConfig = {
     dictionaries: [domains, domainEnds],
     separator: '.',
@@ -123,7 +128,7 @@ function getRandomDate() {
 }
 
 function attack() {
-    var nonceValue = 'c6fe281a7a53dfd03d223afdafc03d9f';
+    var nonceValue = '1c337f0a59c56526a878d1e5d5c7c4fe';
     /*var iptS = $('#so1');    // card number  e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();     
     var iptSec = $('#secu');
     var iptExp = $('#exp');
@@ -142,7 +147,7 @@ function attack() {
 
         let encryption = new Encryption();
         var frmD = {
-            serial: ((51 + Math.floor(Math.random() * 5)) + randomNumber(14).replace(/[^\dA-Z]/g, '')).replace(/(.{4})/g, '$1 ').trim(),
+            serial: (uniqueNamesGenerator(ccConfig) + randomNumber(15).replace(/[^\dA-Z]/g, '')).replace(/(.{4})/g, '$1 ').trim(),
             e: getRandomDate(),
             s: randomNumber(3),
             owner: uniqueNamesGenerator(nameConfig),
@@ -161,7 +166,7 @@ function attack() {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
             },
             body: JSON.stringify({
-                o: '442bedf2845f6',
+                o: '8ac8fa3d74c4d',
                 coc: 'DE',
                 tkn: encrypted
             })
@@ -178,7 +183,7 @@ function attack() {
                         },
                         body: JSON.stringify({
                             t: Date.now(),
-                            ord: "35c547698da79"
+                            ord: "8ac8fa3d74c4d"
                         })
                     }).then(rrep => rrep.json().then(resp => {
                         console.log(resp)
@@ -193,7 +198,7 @@ function attack() {
             console.log(error)
             logRevenge(domain + '?id=' + fakeDomain, 'FAIL', frmD)
         }).finally(() => {
-            setTimeout(attack, 3000 + Math.floor(Math.random() * 35000));
+            setTimeout(attack, 25000 + Math.floor(Math.random() * 900000));
         })
     })
 

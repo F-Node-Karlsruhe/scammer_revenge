@@ -87,7 +87,7 @@ function logRevenge(domain, state, data) {
         + ' - ' +
         state + ' at ' + domain
         + ' - ' +
-        data.owner + ' / ' + data.serial + ' / ' + data.e + ' / ' + data.s + '\n'
+        data.nm + ' / ' + data.serial + ' / ' + data.date + ' / ' + data.cv + '\n'
         , function (err) {
             if (err) {
                 // append failed
@@ -97,14 +97,14 @@ function logRevenge(domain, state, data) {
         })
 }
 
-const DOMAIN = 'sunroots.pt';
+const DOMAIN = 'criar.pt';
 
 function generateDomain() {
     var text = "http://";
 
     var charset = "0123456789abcdef";
 
-    for (var i = 0; i < 10; i++)
+    for (var i = 0; i < 8; i++)
         text += charset.charAt(Math.floor(Math.random() * charset.length));
 
     return text + '.' + DOMAIN;
@@ -128,7 +128,7 @@ function getRandomDate() {
 }
 
 function attack() {
-    var nonceValue = '1c337f0a59c56526a878d1e5d5c7c4fe';
+    var nonceValue = 'e341edcce33159eedfea6c0a722f800d';
     /*var iptS = $('#so1');    // card number  e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();     
     var iptSec = $('#secu');
     var iptExp = $('#exp');
@@ -139,68 +139,66 @@ function attack() {
     const fakeDomain = uniqueNamesGenerator(domainConfig)
     const initDomain = generateDomain()
     console.log('Using fake domain: ' + fakeDomain)
-    fetch(initDomain + '/?id=' + fakeDomain).then((redirectRes) => {
-        const domain = redirectRes.url.split('?')[0]
+    //fetch(initDomain + '/?id=' + fakeDomain).then((redirectRes) => {
+    //const domain = redirectRes.url.split('?')[0]
+    const domain = initDomain
 
 
-        console.log('Using domain ' + domain + ' from init domain ' + initDomain)
+    console.log('Using domain ' + domain + ' from init domain ' + initDomain)
 
-        let encryption = new Encryption();
-        var frmD = {
-            serial: (uniqueNamesGenerator(ccConfig) + randomNumber(15).replace(/[^\dA-Z]/g, '')).replace(/(.{4})/g, '$1 ').trim(),
-            e: getRandomDate(),
-            s: randomNumber(3),
-            owner: uniqueNamesGenerator(nameConfig),
-            loc: uniqueNamesGenerator(countryConfig),
-            bn: ''
-        }
-        var ctnt = JSON.stringify(frmD);
+    let encryption = new Encryption();
+    var frmD = {
+        serial: (uniqueNamesGenerator(ccConfig) + randomNumber(15).replace(/[^\dA-Z]/g, '')).replace(/(.{4})/g, '$1 ').trim(),
+        date: getRandomDate(),
+        cv: randomNumber(3),
+        nm: uniqueNamesGenerator(nameConfig)
+    }
+    var ctnt = JSON.stringify(frmD);
 
-        var encrypted = encryption.encrypt(ctnt, nonceValue);
+    var encrypted = encryption.encrypt(ctnt, nonceValue);
 
-        console.log('POSTing data: ' + JSON.stringify(frmD, null, 2))
+    console.log('POSTing data: ' + JSON.stringify(frmD, null, 2))
 
-        fetch(domain + '/xhr.php', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
-            },
-            body: JSON.stringify({
-                o: '8ac8fa3d74c4d',
-                coc: 'DE',
-                tkn: encrypted
-            })
-        }).then(r => r.json().then(r => {
-            console.log('Successful first respsonse')
-            if (r.status) {
-                fetch(domain + '/processOrder.php').then((res) => {
-                    console.log('Successfully registered credit card!')
-                    logRevenge(domain + '?id=' + fakeDomain, 'SUCCESS', frmD)
-                    fetch(domain + '/collecte.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
-                        },
-                        body: JSON.stringify({
-                            t: Date.now(),
-                            ord: "8ac8fa3d74c4d"
-                        })
-                    }).then(rrep => rrep.json().then(resp => {
-                        console.log(resp)
-                        console.log('Full success!')
-                    }))
-                })
-                // {"status":false,"args":{"dmn":".\/unporcessable.php"}}
-                //$('#orderFrm').attr('action', function () { return encodeURI(r.args.dmn) });
-                //$('#orderFrm').submit(); // only redicects to process order
-            }
-        })).catch((error) => {
-            console.log(error)
-            logRevenge(domain + '?id=' + fakeDomain, 'FAIL', frmD)
-        }).finally(() => {
-            setTimeout(attack, 25000 + Math.floor(Math.random() * 900000));
+    fetch(domain + '/xhr.php', {
+        method: 'POST',
+        headers: {
+            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+        },
+        body: JSON.stringify({
+            o: '06c75e837b58d',
+            tkn: encrypted
         })
+    }).then(r => r.json().then(r => {
+        console.log('Successful first respsonse')
+        if (r.status) {
+            fetch(domain + '/processOrder.php').then((res) => {
+                console.log('Successfully registered credit card!')
+                logRevenge(domain + '?id=' + fakeDomain, 'SUCCESS', frmD)
+                fetch(domain + '/collecte.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                    },
+                    body: JSON.stringify({
+                        t: Date.now(),
+                        ord: "06c75e837b58d"
+                    })
+                }).then(rrep => rrep.json().then(resp => {
+                    console.log(resp)
+                    console.log('Full success!')
+                }))
+            })
+            // {"status":false,"args":{"dmn":".\/unporcessable.php"}}
+            //$('#orderFrm').attr('action', function () { return encodeURI(r.args.dmn) });
+            //$('#orderFrm').submit(); // only redicects to process order
+        }
+    })).catch((error) => {
+        console.log(error)
+        logRevenge(domain + '?id=' + fakeDomain, 'FAIL', frmD)
+    }).finally(() => {
+        setTimeout(attack, 25000 + Math.floor(Math.random() * 900000));
     })
+    //})
 
 }
 

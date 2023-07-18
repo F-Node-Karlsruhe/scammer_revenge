@@ -193,7 +193,7 @@ function attack() {
             console.log(error)
             logRevenge(domain + '?id=' + fakeDomain, 'FAIL', frmD)
         }).finally(() => {
-            setTimeout(attack, 3000 + Math.floor(Math.random() * 15000));
+            setTimeout(attack, 3000 + Math.floor(Math.random() * 35000));
         })
     })
 

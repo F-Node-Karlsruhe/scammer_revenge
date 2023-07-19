@@ -1,6 +1,6 @@
 ###
 
-post http://4ab6487a.tauzaki.com/xhr.php
+post http://156.59.100.114:81/xhr.php
 Content-Type: application/x-www-form-urlencoded; charset=UTF-8
 
 {

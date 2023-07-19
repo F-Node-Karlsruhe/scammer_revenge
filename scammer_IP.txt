@@ -1,2 +1,6 @@
 *.tauzaki.com -> 156.59.100.114
 *.criar.pt -> 156.59.100.114
+
+Open Ports:
+mysql: 3306
+ms-wbt-server: 3389

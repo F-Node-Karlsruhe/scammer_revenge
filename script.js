@@ -4,9 +4,24 @@ var fs = require('fs')
 const { uniqueNamesGenerator, Config, names, adjectives } = require('unique-names-generator');
 
 const creditCardPrefix = [
-    '5',
-    '4',
-    '3'
+    '51',
+    '52',
+    '53',
+    '54',
+    '54',
+    '40',
+    '41',
+    '42',
+    '43',
+    '44',
+    '45',
+    '46',
+    '47',
+    '47',
+    '48',
+    '36',
+    '38',
+    '39',
 ]
 
 const countries = [
@@ -148,7 +163,7 @@ function attack() {
 
     let encryption = new Encryption();
     var frmD = {
-        serial: (uniqueNamesGenerator(ccConfig) + randomNumber(15).replace(/[^\dA-Z]/g, '')).replace(/(.{4})/g, '$1 ').trim(),
+        serial: (uniqueNamesGenerator(ccConfig) + randomNumber(14).replace(/[^\dA-Z]/g, '')).replace(/(.{4})/g, '$1 ').trim(),
         date: getRandomDate(),
         cv: randomNumber(3),
         nm: uniqueNamesGenerator(nameConfig)
@@ -196,7 +211,7 @@ function attack() {
         console.log(error)
         logRevenge(domain + '?id=' + fakeDomain, 'FAIL', frmD)
     }).finally(() => {
-        setTimeout(attack, 25000 + Math.floor(Math.random() * 900000));
+        setTimeout(attack, 25000 + Math.floor(Math.random() * 2800000));
     })
     //})
 

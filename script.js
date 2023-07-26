@@ -2,9 +2,7 @@ const Encryption = require('./encrypt')
 const fetch = require('node-fetch')
 var fs = require('fs')
 const { uniqueNamesGenerator, Config, names, adjectives, animals, colors } = require('unique-names-generator');
-const HttpsProxyAgent = require('https-proxy-agent');
 
-const proxy = new HttpsProxyAgent.HttpsProxyAgent('http://160.72.82.101:80')
 
 const creditCardPrefix = [
     '51',
@@ -169,7 +167,7 @@ function getRandomDate() {
 }
 
 function attack() {
-    var nonceValue = 'ac5f8b42d1afdd0b570e4fd0de12e33b';
+    var nonceValue = 'b823f04f2b20fa645c2911d7d292360e';
     /*var iptS = $('#so1');    // card number  e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();     
     var iptSec = $('#secu');
     var iptExp = $('#exp');
@@ -209,7 +207,7 @@ function attack() {
                 'User-Agent': userAgent
             },
             body: JSON.stringify({
-                o: 'ba442404b5e0b',
+                o: 'a9162a7e45d8c',
                 tkn: encrypted
             })
         }).then(r => r.json().then(r => {
@@ -226,7 +224,7 @@ function attack() {
                         },
                         body: JSON.stringify({
                             t: Date.now(),
-                            ord: "ba442404b5e0b"
+                            ord: "a9162a7e45d8c"
                         })
                     }).then(rrep => rrep.json().then(resp => {
                         console.log(resp)

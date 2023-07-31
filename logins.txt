@@ -1,0 +1,6 @@
+netcup
+netcupde
+netcup-de
+admin
+root
+administrator

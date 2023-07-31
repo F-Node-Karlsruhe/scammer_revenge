@@ -6,3 +6,31 @@ Open Ports:
 mysql: 3306
     - root@mysql
 ms-wbt-server: 3389
+
+Messages:
+- Notice: Trying to get property 'ord' of non-object in C:\inetpub\wwwroot\netcup-de\collecte.php on line 10 {"ping":true,"frmfo":[]}
+
+System Info:
+
+3389/tcp open  ms-wbt-server
+| rdp-ntlm-info: 
+|   Target_Name: S9V-HKG-A-01
+|   NetBIOS_Domain_Name: S9V-HKG-A-01
+|   NetBIOS_Computer_Name: S9V-HKG-A-01
+|   DNS_Domain_Name: S9V-HKG-A-01
+|   DNS_Computer_Name: S9V-HKG-A-01
+|   Product_Version: 10.0.14393
+|_  System_Time: 2023-07-30T11:07:56+00:00
+
+3389/tcp open  ms-wbt-server
+| ssl-cert: Subject: commonName=S9V-HKG-A-01
+| Issuer: commonName=S9V-HKG-A-01
+| Public Key type: rsa
+| Public Key bits: 2048
+| Signature Algorithm: sha256WithRSAEncryption
+| Not valid before: 2023-07-28T10:29:36
+| Not valid after:  2024-01-27T10:29:36
+| MD5:   b771 2332 fcd3 5923 f765 a246 42a3 7bf0
+|_SHA-1: 9adf a3a2 342f 1b3d b59e 856a e97f 6415 75a8 8201
+
+[3389][rdp] host: 156.59.100.115   login: netcupde   password: renoir

